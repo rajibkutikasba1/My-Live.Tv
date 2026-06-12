@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Currency Exchange Rates</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .toffee-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+        }
+    </style>
+</head>
+<body class="toffee-gradient text-white font-sans min-h-screen">
+
+    <div class="bg-slate-900/90 backdrop-blur-md p-4 shadow-lg sticky top-0 z-50 flex justify-between items-center border-b border-slate-800">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">💵</span>
+            <h1 class="text-xl font-black tracking-wider text-green-500">LIVE <span class="text-white">EXCHANGE</span></h1>
+        </div>
+        <span class="bg-green-600 text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-widest animate-pulse">Live Rates</span>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 mt-6 pb-16">
+        
+        <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-xl mb-8">
+            <h2 class="text-md font-bold text-green-400 mb-4 flex items-center gap-2">
+                🧮 কারেন্সি কনভার্টার (Calculator)
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">পরিমাণ (Amount)</label>
+                    <input type="number" id="amount" value="1" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-green-500">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">যে দেশ থেকে (From)</label>
+                    <select id="from-currency" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-green-500">
+                        <option value="SAR" selected>SAR - সৌদি রিয়াল</option>
+                        <option value="AED">AED - দুবাই দিরহাম</option>
+                        <option value="USD">USD - ইউএস ডলার</option>
+                        <option value="MYR">MYR - মালয়েশিয়ান রিঙ্গিত</option>
+                        <option value="KWD">KWD - কুয়েতি দিনার</option>
+                        <option value="OMR">OMR - ওমানি রিয়াল</option>
+                        <option value="QAR">QAR - কাতারি রিয়াল</option>
+                        <option value="EUR">EUR - ইউরো</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">যে দেশে (To)</label>
+                    <select id="to-currency" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-white font-bold focus:outline-none focus:border-green-500">
+                        <option value="BDT" selected>BDT - বাংলাদেশী টাকা</option>
+                        <option value="USD">USD - ইউএস ডলার</option>
+                        <option value="INR">INR - ভারতীয় রুপি</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-5 text-center p-3 bg-slate-800/50 rounded-xl border border-slate-700/50">
+                <p class="text-xs text-slate-400">কনভার্ট করা রেজাল্ট:</p>
+                <h3 id="convert-result" class="text-xl font-black text-green-400 mt-1">लोड হচ্ছে...</h3>
+            </div>
+        </div>
+
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 bg-green-500 rounded-full"></span> ১ বিদেশী মুদ্রা = বাংলাদেশী টাকা (BDT):
+        </h3>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4" id="rates-grid">
+            <div class="col-span-full text-center py-10 text-slate-400">লাইভ রেট লোড হচ্ছে, দয়া করে অপেক্ষা করুন...</div>
+        </div>
+
+    </div>
+
+    <script>
+        // ফ্রি এবং ওপেন সোর্স এক্সচেঞ্জ রেট API
+        const apiURL = "https://open.er-api.com/v6/latest/USD";
+
+        // প্রধান জনপ্রিয় কারেন্সিগুলোর লিস্ট (বাংলাদেশের জন্য)
+        const popularCurrencies = [
+            { code: 'SAR', name: 'সৌদি রিয়াল', flag: '🇸🇦' },
+            { code: 'AED', name: 'দুবাই দিরহাম', flag: '🇦🇪' },
+            { code: 'USD', name: 'ইউএস ডলার', flag: '🇺🇸' },
+            { code: 'MYR', name: 'মালয়েশিয়া রিঙ্গিত', flag: '🇲🇾' },
+            { code: 'KWD', name: 'কুয়েতি দিনার', flag: '🇰🇼' },
+            { code: 'OMR', name: 'ওমানি রিয়াল', flag: '🇴🇲' },
+            { code: 'QAR', name: 'কাতারি রিয়াল', flag: '🇶🇦' },
+            { code: 'SGD', name: 'সিঙ্গাপুর ডলার', flag: '🇸🇬' },
+            { code: 'EUR', name: 'ইউরো', flag: '🇪🇺' },
+            { code: 'GBP', name: 'ব্রিটিশ পাউন্ড', flag: '🇬🇧' },
+            { code: 'INR', name: 'ভারতীয় রুপি', flag: '🇮🇳' },
+            { code: 'KRW', name: 'কোরিয়ান ওন', flag: '🇰🇷' }
+        ];
+
+        let exchangeRates = {};
+
+        // এপিআই থেকে ডাটা নিয়ে আসা
+        async function fetchRates() {
+            try {
+                const response = await fetch(apiURL);
+                const data = await response.json();
+                if(data && data.rates) {
+                    exchangeRates = data.rates;
+                    renderRatesGrid();
+                    calculateConversion();
+                }
+            } catch (error) {
+                document.getElementById('rates-grid').innerHTML = `<div class="col-span-full text-center text-red-400 py-5">রেট লোড করতে সমস্যা হয়েছে! ইন্টারনেট চেক করুন।</div>`;
+            }
+        }
+
+        // সব দেশের রেট গ্রিডে সাজানো (১ বিদেশী মুদ্রা = কত টাকা)
+        function renderRatesGrid() {
+            const bdtRate = exchangeRates['BDT'];
+            const grid = document.getElementById('rates-grid');
+            grid.innerHTML = '';
+
+            popularCurrencies.forEach(coin => {
+                // ১ ইউএসডি থেকে কনভার্ট করে সেই দেশের সাপেক্ষে বিডিটি বের করা
+                const rateInUSD = exchangeRates[coin.code];
+                const finalRateInBDT = (bdtRate / rateInUSD).toFixed(2);
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/60 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center shadow-md hover:border-green-500 transition-all duration-300";
+                card.innerHTML = `
+                    <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center text-xl mb-2 shadow-inner">
+                        ${coin.flag}
+                    </div>
+                    <span class="font-bold text-xs text-slate-400 tracking-wide text-center">${coin.name} (${coin.code})</span>
+                    <span class="text-lg font-black text-green-400 mt-1">৳ ${finalRateInBDT}</span>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // ক্যালকুলেটর হিসাব নিকাশ করা
+        function calculateConversion() {
+            if(!exchangeRates['USD']) return;
+            
+            const amount = parseFloat(document.getElementById('amount').value) || 0;
+            const from = document.getElementById('from-currency').value;
+            const to = document.getElementById('to-currency').value;
+
+            // কারেন্সি রূপান্তর সূত্র
+            const amountInUSD = amount / exchangeRates[from];
+            const convertedAmount = (amountInUSD * exchangeRates[to]).toFixed(2);
+
+            let symbol = to === 'BDT' ? '৳' : '$';
+            document.getElementById('convert-result').innerText = `${amount} ${from} = ${symbol} ${convertedAmount} ${to}`;
+        }
+
+        // ইনপুট এবং সিলেক্ট চেঞ্জ হলে সাথে সাথে হিসাব বদলাবে
+        document.getElementById('amount').addEventListener('input', calculateConversion);
+        document.getElementById('from-currency').addEventListener('change', calculateConversion);
+        document.getElementById('to-currency').addEventListener('change', calculateConversion);
+
+        // পেজ লোড হলেই রান হবে
+        fetchRates();
+        // প্রতি ৫ মিনিটে ডাটা অটো রিফ্রেশ হবে
+        setInterval(fetchRates, 300000);
+    </script>
+</body>
+</html>
