@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toffee Style Saudi TV</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .toffee-gradient {
+            background: linear-gradient(135deg, #111827 0%, #030712 100%);
+        }
+    </style>
+</head>
+<body class="toffee-gradient text-white font-sans min-h-screen">
+
+    <div class="bg-gray-900/80 backdrop-blur-md p-4 shadow-lg sticky top-0 z-50 flex justify-between items-center border-b border-gray-800">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">📺</span>
+            <h1 class="text-xl font-black tracking-wider text-green-400">SAUDI <span class="text-white">STREAM</span></h1>
+        </div>
+        <span class="bg-green-600 text-xs px-2.5 py-1 rounded-full font-bold uppercase tracking-widest animate-pulse">Live</span>
+    </div>
+
+    <div class="w-full max-w-4xl mx-auto mt-4 px-2">
+        <div class="bg-black rounded-2xl overflow-hidden shadow-2xl border border-gray-800 aspect-video">
+            <iframe id="live-player" class="w-full h-full" src="https://www.youtube.com/embed/live_stream?channel=UC8bBfS1it7DNf-S8T_K_2OQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="mt-4 bg-gray-900/50 p-3 rounded-xl border border-gray-800 text-center">
+            <p class="text-sm text-gray-400">এখন প্লে হচ্ছে</p>
+            <h2 id="now-playing" class="text-lg font-bold text-green-400 mt-0.5">Saudi Quran (Makkah Live)</h2>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 mt-8 pb-16">
+        <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 bg-green-500 rounded-full"></span> পপুলার লাইভ চ্যানেল সমূহ:
+        </h3>
+        
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            
+            <div onclick="playChannel('UC8bBfS1it7DNf-S8T_K_2OQ', 'Saudi Quran (Makkah Live)')" 
+                 class="bg-gray-900/60 p-4 rounded-2xl border border-gray-800 flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-gray-800/80 transition-all duration-300 group shadow-md active:scale-95">
+                <div class="w-16 h-16 bg-gradient-to-tr from-green-600 to-emerald-400 rounded-full flex items-center justify-center font-black text-xl mb-3 shadow-lg group-hover:scale-110 transition duration-300">🕋</div>
+                <span class="font-bold text-sm tracking-wide group-hover:text-green-400 transition text-center">Makkah Live</span>
+            </div>
+
+            <div onclick="playChannel('UCEj_m69Y79gOIO_99NfORvQ', 'Saudi Sunnah (Madinah Live)')" 
+                 class="bg-gray-900/60 p-4 rounded-2xl border border-gray-800 flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-gray-800/80 transition-all duration-300 group shadow-md active:scale-95">
+                <div class="w-16 h-16 bg-gradient-to-tr from-green-700 to-teal-500 rounded-full flex items-center justify-center font-black text-xl mb-3 shadow-lg group-hover:scale-110 transition duration-300">🕌</div>
+                <span class="font-bold text-sm tracking-wide group-hover:text-green-400 transition text-center">Madinah Live</span>
+            </div>
+
+            <div onclick="playChannel('UCvK_Z_Y-R67m-Z9EAtitw3g', 'Al Ekhbariya News')" 
+                 class="bg-gray-900/60 p-4 rounded-2xl border border-gray-800 flex flex-col items-center justify-center cursor-pointer hover:border-green-500 hover:bg-gray-800/80 transition-all duration-300 group shadow-md active:scale-95">
+                <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full flex items-center justify-center font-black text-xl mb-3 shadow-lg group-hover:scale-110 transition duration-300">🇸🇦</div>
+                <span class="font-bold text-sm tracking-wide group-hover:text-green-400 transition text-center">Al Ekhbariya</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function playChannel(channelId, name) {
+            var iframe = document.getElementById('live-player');
+            // ইউটিউব অফিসিয়াল প্লেয়ারে লাইভ চ্যানেল রেন্ডার করা
+            iframe.src = "https://www.youtube.com/embed/live_stream?channel=" + channelId + "&autoplay=1";
+            document.getElementById('now-playing').innerText = name;
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+</body>
+</html>
