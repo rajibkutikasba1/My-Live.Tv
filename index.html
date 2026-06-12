@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রবাসী ভাইদের কষ্টার্জিত টাকার সঠিক রেট</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .toffee-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+        }
+    </style>
+</head>
+<body class="toffee-gradient text-white font-sans min-h-screen">
+
+    <div class="bg-slate-900/90 backdrop-blur-md p-4 shadow-lg sticky top-0 z-50 flex flex-col items-center justify-center border-b border-slate-800 text-center">
+        <div class="flex items-center gap-2">
+            <span class="text-2xl">🇧🇩</span>
+            <h1 class="text-md font-black tracking-wide text-green-500 uppercase">প্রবাসী ভাইদের কষ্টার্জিত টাকার সঠিক রেট</h1>
+            <span class="text-2xl">🇸🇦</span>
+        </div>
+        <p class="text-[10px] text-slate-400 mt-1 font-medium tracking-wider">👷‍♂️ প্রবাসী ভাইদের কষ্টের টাকা, সঠিক রেটে পৌঁছাক ঘরে 👷‍♂️</p>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-4 mt-6 pb-16">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="bg-gradient-to-br from-pink-900/60 to-slate-900/80 p-5 rounded-2xl border border-pink-700/30 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-pink-300 font-bold uppercase tracking-wider">bKash রেমিট্যান্স রেট</p>
+                    <h2 class="text-3xl font-black text-white mt-1" id="bkash-rate">৳ 00.00</h2>
+                    <p class="text-[10px] text-slate-400 mt-1">*সরকারি ২.৫% প্রণোদনা সহ</p>
+                </div>
+                <div class="text-3xl bg-pink-600/20 p-3 rounded-2xl border border-pink-500/30 font-bold text-pink-400">bK</div>
+            </div>
+
+            <div class="bg-gradient-to-br from-emerald-900/50 to-slate-900/80 p-5 rounded-2xl border border-emerald-700/30 shadow-xl flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-emerald-300 font-bold uppercase tracking-wider">১ সৌদি রিয়াল (SAR) =</p>
+                    <h2 class="text-3xl font-black text-emerald-400 mt-1" id="main-bdt-rate">৳ 00.00</h2>
+                    <p class="text-[10px] text-slate-400 mt-1">আজকের অফিসিয়াল ক্যাশ রেট</p>
+                </div>
+                <div class="text-3xl bg-emerald-600/20 p-3 rounded-2xl border border-emerald-500/30">🇸🇦</div>
+            </div>
+        </div>
+
+        <div class="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-xl mb-8">
+            <h3 class="text-sm font-bold text-green-400 mb-3">🧮 রিয়াল হিসাবকারী (Calculator)</h3>
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 font-bold text-sm">SAR</span>
+                <input type="number" id="riyal-amount" value="100" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 pl-12 text-white font-black text-lg focus:outline-none focus:border-green-500">
+            </div>
+            <div class="mt-4 p-3 bg-slate-800/40 rounded-xl border border-slate-700/50 text-center">
+                <span class="text-xs text-slate-400">মোট বাংলাদেশি টাকা পাবেন:</span>
+                <h4 class="text-xl font-black text-green-400 mt-0.5" id="calc-result">৳ 0.00 টাকা</h4>
+            </div>
+        </div>
+
+        <h3 class="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4 flex items-center gap-2">
+            <span class="w-2 h-2 bg-green-500 rounded-full"></span> বাংলাদেশের প্রধান ব্যাংক ও রেমিট্যান্স রেট:
+</h3>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="banks-grid">
+            </div>
+
+    </div>
+
+    <script>
+        // 🛠️ [এখানে আপনি আপনার ইচ্ছেমতো আজকের আসল রেট লিখে দিন]
+        // উদাহরণ: ১ রিয়াল সমান যদি ৩১.৫০ টাকা হয়, তবে নিচে শুধু 31.50 লিখে সেভ করুন।
+        const todaysRiyalRate = 31.50; 
+
+        // ব্যাংকগুলোর নাম এবং তারা অফিসিয়ালি কত টাকা রেট দিচ্ছে তা সাজানো
+        const bangladeshBanks = [
+            { name: "ইসলামী ব্যাংক বাংলাদেশ", rate: todaysRiyalRate + 0.10 },
+            { name: "ডাচ-বাংলা ব্যাংক (DBBL)", rate: todaysRiyalRate + 0.05 },
+            { name: "পূবালী ব্যাংক পিএলসি", rate: todaysRiyalRate + 0.02 },
+            { name: "সোনালী ব্যাংক পিএলসি", rate: todaysRiyalRate + 0.00 },
+            { name: "অগ্রণী ব্যাংক পিএলসি", rate: todaysRiyalRate + 0.00 },
+            { name: "ব্র্যাক ব্যাংক পিএলসি", rate: todaysRiyalRate + 0.08 },
+            { name: "দি সিটি ব্যাংক পিএলসি", rate: todaysRiyalRate + 0.05 }
+        ];
+
+        function initApp() {
+            // মেইন ক্যাশ রেট ডিসপ্লে
+            document.getElementById('main-bdt-rate').innerText = `৳ ${todaysRiyalRate.toFixed(2)}`;
+            
+            // বিকাশ রেমিট্যান্স রেট (২.৫% সরকারি প্রণোদনা যোগ করে)
+            const bkashRate = todaysRiyalRate * 1.025;
+            document.getElementById('bkash-rate').innerText = `৳ ${bkashRate.toFixed(2)}`;
+
+            calculateTotal();
+
+            // ব্যাংক লিস্ট তৈরি
+            const grid = document.getElementById('banks-grid');
+            grid.innerHTML = '';
+
+            bangladeshBanks.forEach(bank => {
+                // সরকারি ২.৫% ইনসেন্টিভ যোগ করে ফাইনাল রেট
+                let rateWithIncentive = (bank.rate * 1.025).toFixed(2);
+
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/60 p-4 rounded-xl border border-slate-800 flex justify-between items-center shadow-md";
+                card.innerHTML = `
+                    <div>
+                        <h4 class="font-bold text-sm text-slate-200">${bank.name}</h4>
+                        <span class="text-[9px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded mt-1 inline-block uppercase tracking-wider">Remittance Rate</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-md font-black text-green-400">৳ ${rateWithIncentive}</span>
+                        <p class="text-[8px] text-slate-500 mt-0.5">প্রণোদনাসহ</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function calculateTotal() {
+            const riyalAmount = parseFloat(document.getElementById('riyal-amount').value) || 0;
+            const totalBDT = riyalAmount * (todaysRiyalRate * 1.025);
+            document.getElementById('calc-result').innerText = `৳ ${totalBDT.toLocaleString('en-IN', {maximumFractionDigits: 2})} টাকা`;
+        }
+
+        document.getElementById('riyal-amount').addEventListener('input', calculateTotal);
+
+        // অ্যাপ রান করা
+        initApp();
+    </script>
+</body>
+</html>
